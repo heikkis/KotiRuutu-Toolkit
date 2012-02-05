@@ -1,0 +1,21 @@
+{
+  "name": "KotiRuutu toolkit",
+  "version": "3.3",
+  "description": "Lisätoimintoja nauhoituksien tekemiseen helpommin. Yhteensopiva Sonera KotiTV-palvelun Web-sivuston kanssa.",
+  "content_scripts": [
+    {
+      "matches": ["https://*.sonera.fi/OmatSivut/?Laajakaista_Iptv"],
+      "js": ["plugin_redirect.js"]
+    },
+    {
+      "matches": ["https://*.sonera.fi/OmatSivut/Apps/Iptv/index.jsp","https://*.sonera.fi/OmatSivut/Apps/Iptv/index.jsp?m=Guide","https://*.sonera.fi/OmatSivut/Apps/Iptv/index.jsp?day=*"],
+      "css": ["jnotify/jquery.pnotify.default.css"],
+      "js": ["json/json.js", "jquery/jquery-1.7.1.min.js", "jnotify/jquery.pnotify.min.js", "plugin_lib.js", "plugin_fastRecordGuide.js"]
+    },
+    {
+      "matches": ["https://*.sonera.fi/OmatSivut/Apps/Iptv/index.jsp?m=Search&search=*"],
+      "css": ["jnotify/jquery.pnotify.default.css"],
+      "js": ["json/json.js", "jquery/jquery-1.7.1.min.js", "jnotify/jquery.pnotify.min.js", "plugin_lib.js", "plugin_fastRecordSearch.js"]
+    }
+  ]
+}
