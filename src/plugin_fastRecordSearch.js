@@ -15,7 +15,7 @@ $(document)
                     var $deleteAll = $(
                             '<span class="xtra_link"><a id="deleteAll" href="javascript:void(0)"><span class="removed">-</span> Poista hakutulokset</a></span>')
                             .click(function() {
-                                KotiRuutuToolKit.deleteAll($(this).parentsUntil("div.app-header").has("body"));
+                                KotiRuutuToolKit.deleteAllTimings($(this).parentsUntil("div.app-header").has("body"));
                                 $(this).fadeOut(500).fadeIn(200);
                             });
 

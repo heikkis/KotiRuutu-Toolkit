@@ -62,23 +62,55 @@ var KotiRuutuToolKit = {
         });
 
     },
+    
+    removeRecording : function(link) {
+        $.ajax({
+            type : "GET",
+            url : this.compileDialogURL({
+                action : 'delete',
+                storage : "network",
+                program : link.prop("programId")
+            }),
+            context : link,
+            success : function(msg) {
+                var status = JSON.parse(msg).data.result;
+
+                if (status == true) {
+                    KotiRuutuToolKit.showInfoFromLink(false, link);
+                }
+                
+                var programRow = link.parentsUntil('ul');
+                link.remove();
+                
+                programRow.addClass("removedBackground"); 
+                
+            }
+        });
+
+    },    
 
     showInfoFromLink : function(added, link) {
         var date = link.prop('date');
         var program = link.prop('programText');
         var time = link.prop('time');
 
-        var mark;
+        var text;
         if (added == true) {
             cssclass = "added";
-            mark = '<span class="added">+</span>';
+            text = '<span class="added">+</span>';
         } else {
-            mark = '<span class="removed">-</span>';
+            text = '<span class="removed">-</span>';
             cssclass = 'removed';
         }
-
+        
+        text += '&nbsp;&nbsp;' + date;
+        if (time != null) {
+            text += ' klo ' + time; 
+        }
+        text +=  ': <b>' + program + '</b>';;
+        
         $.pnotify({
-            pnotify_text : mark + '&nbsp;&nbsp;' + date + ' klo ' + time + ': <b>' + program + '</b>',
+            pnotify_text : text ,
             pnotify_animation : {
                 effect_in : 'show',
                 effect_out : 'slide'
@@ -87,7 +119,7 @@ var KotiRuutuToolKit = {
         });
     },
 
-    vaihdaTilaa : function(link) {
+    changeStatus : function(link) {
         if (this.isNewRecording(link)) {
             this.recordProgram(link);
         } else if (this.isTimedRecording(link)) {
@@ -253,7 +285,7 @@ var KotiRuutuToolKit = {
             "src" : "index.jsp?m=Search&search=" + escape(str)
         }).appendTo('body').load(function() {
             KotiRuutuToolKit.alterLinksSearch($(this.contentDocument).find('body'));
-            KotiRuutuToolKit.deleteAll($(this.contentDocument).find('body'));
+            KotiRuutuToolKit.deleteAllTimings($(this.contentDocument).find('body'));
             $('#' + iframeName).remove();
         });
 
@@ -267,14 +299,19 @@ var KotiRuutuToolKit = {
         });
     },
 
-    deleteAll : function(customRoot) {
+    deleteAllTimings : function(customRoot) {
         $(customRoot).find('a[programId != ""]').each(function(index, link) {
             if (KotiRuutuToolKit.isTimedRecording($(link))) {
                 KotiRuutuToolKit.removeTiming($(link));
             }
         });
-
     },
+    
+    deleteAllRecordings : function(customRoot) {
+        $(customRoot).find('a[programId != ""]').each(function(index, link) {
+            KotiRuutuToolKit.removeRecording($(link));
+        });
+    },    
 
     alterLinksSearch : function(customRoot) {
         $(customRoot).find('a[href*="javascript:Ui.openProgram"]').each(function() {
@@ -290,7 +327,7 @@ var KotiRuutuToolKit = {
 
             $(this).attr("href", "javascript:void(0)");
             $(this).click(function() {
-                KotiRuutuToolKit.vaihdaTilaa($(this));
+                KotiRuutuToolKit.changeStatus($(this));
             });
         });
 
@@ -309,7 +346,49 @@ var KotiRuutuToolKit = {
 
             $(this).attr("href", "javascript:void(0)");
             $(this).click(function() {
-                KotiRuutuToolKit.vaihdaTilaa($(this));
+                KotiRuutuToolKit.changeStatus($(this));
+            });
+            
+            // For info access, How to set up nicely to the UI
+            // $(this).after('<a href="javascript:Ui.openProgram(' + $(this).prop("programId") + ');" onclick="Ui.setSource(this);"> (i) </a>');
+        });
+
+    },
+    
+    alterLinksRecordings : function(customRoot) {
+        $(customRoot).find('a[href*="javascript:Ui.confirmRemove"]').each(function() {
+            $(this).prop("programId", $(this).attr("href").substr(28, 7));
+
+            var programRow = $(this).parentsUntil('ul');
+
+            $(this).prop("date", programRow.find('.date > .value').get(0).innerText);
+            $(this).prop("programText", programRow.find('.program > .value > a').get(0).innerText);
+            // NA $(this).prop("time", programRow.find('.time > .value').get(0).innerText);
+            $(this).prop("duration", programRow.find('.duration > .value').get(0).innerText);
+            $(this).prop("channel", programRow.find('.channel > .value').get(0).innerText);
+
+            $(this).attr("href", "javascript:void(0)");
+            $(this).click(function() {
+                KotiRuutuToolKit.removeRecording($(this));
+            });
+        });
+    },
+    
+    alterLinksTimings : function(customRoot) {
+        $(customRoot).find('a[href*="javascript:Ui.openProgram"]').each(function() {
+            $(this).prop("programId", $(this).attr("href").substr(26, 7));
+
+            var programRow = $(this).parentsUntil('ul');
+
+            $(this).prop("date", programRow.find('.date > .value').get(0).innerText);
+            $(this).prop("programText", programRow.find('.program > .value > a').get(0).innerText);
+            // NA $(this).prop("time", programRow.find('.time > .value').get(0).innerText);
+            $(this).prop("duration", programRow.find('.duration > .value').get(0).innerText);
+            $(this).prop("channel", programRow.find('.channel > .value').get(0).innerText);
+
+            $(this).attr("href", "javascript:void(0)");
+            $(this).click(function() {
+                KotiRuutuToolKit.changeStatus($(this));
             });
         });
 
@@ -329,6 +408,7 @@ var KotiRuutuToolKit = {
                     KotiRuutuToolKit.clearSavedSearch();
                     $(this).fadeOut(200).fadeIn(50);
                 });
+        
         var recordSearchResults = $(
                 '<span class="xtra_link"><a id="recordSearchResults" href="javascript:void(0)"><span class="added">+</span> Nauhoita tallennettujen hakujen ohjelmat</a></span>')
                 .click(function() {
