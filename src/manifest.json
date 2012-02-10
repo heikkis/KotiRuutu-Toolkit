@@ -16,6 +16,16 @@
       "matches": ["https://*.sonera.fi/OmatSivut/Apps/Iptv/index.jsp?m=Search&search=*"],
       "css": ["jnotify/jquery.pnotify.default.css"],
       "js": ["json/json.js", "jquery/jquery-1.7.1.min.js", "jnotify/jquery.pnotify.min.js", "plugin_lib.js", "plugin_fastRecordSearch.js"]
+    },
+    {
+      "matches": ["https://*.sonera.fi/OmatSivut/Apps/Iptv/index.jsp?m=Recordings"],
+      "css": ["jnotify/jquery.pnotify.default.css"],
+      "js": ["json/json.js", "jquery/jquery-1.7.1.min.js", "jnotify/jquery.pnotify.min.js", "plugin_lib.js", "plugin_fastDeleteRecording.js"]
+    },
+    {
+      "matches": ["https://*.sonera.fi/OmatSivut/Apps/Iptv/index.jsp?m=Upcoming"],
+      "css": ["jnotify/jquery.pnotify.default.css"],
+      "js": ["json/json.js", "jquery/jquery-1.7.1.min.js", "jnotify/jquery.pnotify.min.js", "plugin_lib.js", "plugin_fastDeleteTiming.js"]
     }
   ]
 }

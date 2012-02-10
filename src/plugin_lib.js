@@ -393,6 +393,11 @@ var KotiRuutuToolKit = {
         });
 
     },
+    
+    getCurrentDateStampForGuide : function () {
+        var currentLink = $('#guide-day').find('.days > .selected').get(0);
+        return Number(currentLink.href.split('day=')[1]);
+    },
 
     addKotiRuutuMenu : function(customRoot) {
         var $showSavedSearch = $(

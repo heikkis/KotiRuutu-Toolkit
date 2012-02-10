@@ -97,3 +97,16 @@ html > body .ui-pnotify {
 .xtra_link {
 	padding: 10px;
 }
+
+.removedBackground {
+	background-color: #DCDCDC;
+}
+
+.showDays {
+	display: block;
+	position: absolute;
+	left: 250px;
+	top: 15px;
+	width: 300px;
+	z-index: 1;
+}
