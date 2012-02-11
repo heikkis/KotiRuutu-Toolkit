@@ -78,12 +78,6 @@ var KotiRuutuToolKit = {
                 if (status == true) {
                     KotiRuutuToolKit.showInfoFromLink(false, link);
                 }
-                
-                var programRow = link.parentsUntil('ul');
-                link.remove();
-                
-                programRow.addClass("removedBackground"); 
-                
             }
         });
 
@@ -369,6 +363,10 @@ var KotiRuutuToolKit = {
 
             $(this).attr("href", "javascript:void(0)");
             $(this).click(function() {
+                
+                var programRow = $(this).parentsUntil('ul');
+                programRow.remove(); 
+                
                 KotiRuutuToolKit.removeRecording($(this));
             });
         });
@@ -388,7 +386,10 @@ var KotiRuutuToolKit = {
 
             $(this).attr("href", "javascript:void(0)");
             $(this).click(function() {
-                KotiRuutuToolKit.changeStatus($(this));
+                
+                var programRow = $(this).parentsUntil('ul');
+                programRow.remove(); 
+                KotiRuutuToolKit.removeTiming($(this));
             });
         });
 
