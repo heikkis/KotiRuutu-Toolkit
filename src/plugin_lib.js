@@ -1,4 +1,61 @@
 var KotiRuutuToolKit = {
+
+    initProgramDetailsWindow : function(link, event) {
+        var $div = $('<div id="app-tip" style="display: block; z-index: 1"/>');
+
+        $div.move = function(event) {
+            
+            var screenWidth = document.body.clientWidth || document.documentElement.clientWidth || self.innerWidth;
+            var screenHeight = document.body.clientHeight || document.documentElement.clientHeight || self.innerHeight;
+            
+            var top = event.clientY - 30;
+            var left = event.clientX + 20;
+            
+            if (screenWidth - event.clientX < 350) {
+                left = event.clientX-350;
+            }
+            
+            if (screenHeight-event.clientY < 200) {
+                top = event.clientY-200;
+            }
+            
+            this.css({
+                'top' : top,
+                'left' : left
+            });
+        };
+
+        $div.hide = function() {
+            this.css({
+                'display' : 'none'
+            });
+        };
+
+        $div.show = function() {
+            this.css({
+                'display' : 'block'
+            });
+        };
+
+        $("body").append($div);
+        link.prop("infoWindow", $div);
+
+        $.ajax({
+            type : "GET",
+            url : this.compileDialogURL({
+                m : 'Dialog',
+                name : "Tip",
+                id : link.prop("programId")
+            }),
+            context : link,
+            success : function(msg) {
+                var text = JSON.parse(msg).html;
+                $div.append(text);
+                $div.move(event);
+            }
+        });
+    },
+
     compileDialogURL : function(params) {
         var url = 'index.jsp?m=Dialog&name=Api';
         for ( var i in params) {
@@ -62,7 +119,7 @@ var KotiRuutuToolKit = {
         });
 
     },
-    
+
     removeRecording : function(link) {
         $.ajax({
             type : "GET",
@@ -81,7 +138,7 @@ var KotiRuutuToolKit = {
             }
         });
 
-    },    
+    },
 
     showInfoFromLink : function(added, link) {
         var date = link.prop('date');
@@ -96,15 +153,16 @@ var KotiRuutuToolKit = {
             text = '<span class="removed">-</span>';
             cssclass = 'removed';
         }
-        
+
         text += '&nbsp;&nbsp;' + date;
         if (time != null) {
-            text += ' klo ' + time; 
+            text += ' klo ' + time;
         }
-        text +=  ': <b>' + program + '</b>';;
-        
+        text += ': <b>' + program + '</b>';
+        ;
+
         $.pnotify({
-            pnotify_text : text ,
+            pnotify_text : text,
             pnotify_animation : {
                 effect_in : 'show',
                 effect_out : 'slide'
@@ -300,12 +358,12 @@ var KotiRuutuToolKit = {
             }
         });
     },
-    
+
     deleteAllRecordings : function(customRoot) {
         $(customRoot).find('a[programId != ""]').each(function(index, link) {
             KotiRuutuToolKit.removeRecording($(link));
         });
-    },    
+    },
 
     alterLinksSearch : function(customRoot) {
         $(customRoot).find('a[href*="javascript:Ui.openProgram"]').each(function() {
@@ -328,7 +386,9 @@ var KotiRuutuToolKit = {
     },
 
     alterLinksGuide : function(customRoot) {
+
         $(customRoot).find('a[href*="javascript:Ui.openProgram"]').each(function() {
+
             $(this).prop("programId", $(this).attr("href").substr(26, 7));
 
             // Own cell
@@ -337,18 +397,30 @@ var KotiRuutuToolKit = {
 
             // Date
             $(this).prop("date", $(this).closest('#content').find('#guide-day > .day')[0].innerText.split(', ')[1].trim());
-
             $(this).attr("href", "javascript:void(0)");
+
+            var link = $(this);
+
+            $(this).mouseover(function() {
+                if (link.prop("infoWindow") == undefined) {
+                    KotiRuutuToolKit.initProgramDetailsWindow(link, event);
+                } else {
+                    link.prop("infoWindow").show();
+                }
+            }).mouseout(function() {
+                link.prop("infoWindow").hide();
+            }).mousemove(function() {
+                link.prop("infoWindow").move(event);
+            });
+
             $(this).click(function() {
                 KotiRuutuToolKit.changeStatus($(this));
             });
-            
-            // For info access, How to set up nicely to the UI
-            // $(this).after('<a href="javascript:Ui.openProgram(' + $(this).prop("programId") + ');" onclick="Ui.setSource(this);"> (i) </a>');
+
         });
 
     },
-    
+
     alterLinksRecordings : function(customRoot) {
         $(customRoot).find('a[href*="javascript:Ui.confirmRemove"]').each(function() {
             $(this).prop("programId", $(this).attr("href").substr(28, 7));
@@ -357,21 +429,22 @@ var KotiRuutuToolKit = {
 
             $(this).prop("date", programRow.find('.date > .value').get(0).innerText);
             $(this).prop("programText", programRow.find('.program > .value > a').get(0).innerText);
-            // NA $(this).prop("time", programRow.find('.time > .value').get(0).innerText);
+            // NA $(this).prop("time", programRow.find('.time >
+            // .value').get(0).innerText);
             $(this).prop("duration", programRow.find('.duration > .value').get(0).innerText);
             $(this).prop("channel", programRow.find('.channel > .value').get(0).innerText);
 
             $(this).attr("href", "javascript:void(0)");
             $(this).click(function() {
-                
+
                 var programRow = $(this).parentsUntil('ul');
-                programRow.remove(); 
-                
+                programRow.remove();
+
                 KotiRuutuToolKit.removeRecording($(this));
             });
         });
     },
-    
+
     alterLinksTimings : function(customRoot) {
         $(customRoot).find('a[href*="javascript:Ui.openProgram"]').each(function() {
             $(this).prop("programId", $(this).attr("href").substr(26, 7));
@@ -380,22 +453,37 @@ var KotiRuutuToolKit = {
 
             $(this).prop("date", programRow.find('.date > .value').get(0).innerText);
             $(this).prop("programText", programRow.find('.program > .value > a').get(0).innerText);
-            // NA $(this).prop("time", programRow.find('.time > .value').get(0).innerText);
+            // NA $(this).prop("time", programRow.find('.time >
+            // .value').get(0).innerText);
             $(this).prop("duration", programRow.find('.duration > .value').get(0).innerText);
             $(this).prop("channel", programRow.find('.channel > .value').get(0).innerText);
 
             $(this).attr("href", "javascript:void(0)");
             $(this).click(function() {
-                
+
                 var programRow = $(this).parentsUntil('ul');
-                programRow.remove(); 
+                programRow.remove();
                 KotiRuutuToolKit.removeTiming($(this));
+            });
+            
+            
+            var link = $(this);
+            $(this).mouseover(function() {
+                if (link.prop("infoWindow") == undefined) {
+                    KotiRuutuToolKit.initProgramDetailsWindow(link, event);
+                } else {
+                    link.prop("infoWindow").show();
+                }
+            }).mouseout(function() {
+                link.prop("infoWindow").hide();
+            }).mousemove(function() {
+                link.prop("infoWindow").move(event);
             });
         });
 
     },
-    
-    getCurrentDateStampForGuide : function () {
+
+    getCurrentDateStampForGuide : function() {
         var currentLink = $('#guide-day').find('.days > .selected').get(0);
         return Number(currentLink.href.split('day=')[1]);
     },
@@ -414,7 +502,7 @@ var KotiRuutuToolKit = {
                     KotiRuutuToolKit.clearSavedSearch();
                     $(this).fadeOut(200).fadeIn(50);
                 });
-        
+
         var recordSearchResults = $(
                 '<span class="xtra_link"><a id="recordSearchResults" href="javascript:void(0)"><span class="added">+</span> Nauhoita tallennettujen hakujen ohjelmat</a></span>')
                 .click(function() {
@@ -430,7 +518,7 @@ var KotiRuutuToolKit = {
                 });
 
         $(customRoot).find('#content').prepend(
-                '<div id="toolkit_menu" style="width: 100%; text-align: center;"><span>KotiRuutuToolKit MENU:</span>');
+                '<div id="toolkit_menu" style="width: 100%; text-align: center;"><span>KotiRuutu ToolKit MENU:</span>');
 
         $(customRoot).find('#toolkit_menu').append($showSavedSearch, $clearSavedSearch, recordSearchResults, deleteSearchResults);
     }
