@@ -1,8 +1,8 @@
 $(document)
         .ready(
                 function() {
-                    KotiRuutuToolKit.alterLinksGuide($(this));
-                    KotiRuutuToolKit.addKotiRuutuMenu($(this));
+                    KotiRuutuToolKitInit.alterLinksGuide($(this));
+                    KotiRuutuToolKitInit.addKotiRuutuMenu($(this));
 
                     var $showNextDay = $(
                             '<span class="xtra_link"><a id="showNextDay" href="javascript:void(0)">Seuraava &gt;</a></span>')
@@ -27,6 +27,5 @@ $(document)
                     $div.append($showPreviousDay, " ", $showNextDay);
 
                     $('#guide-day').after($div);
-                    
-                });
 
+                });

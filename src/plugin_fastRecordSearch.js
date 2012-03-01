@@ -2,8 +2,8 @@ $(document)
         .ready(
                 function() {
 
-                    KotiRuutuToolKit.alterLinksSearch($(this));
-                    KotiRuutuToolKit.addKotiRuutuMenu($(this));
+                    KotiRuutuToolKitInit.alterLinksSearch($(this));
+                    KotiRuutuToolKitInit.addKotiRuutuMenu($(this));
 
                     var $recordAll = $(
                             '<span class="xtra_link"><a id="recordAll" href="javascript:void(0)"><span class="added">+</span> Nauhoita hakutulokset</a></span>')
@@ -25,8 +25,6 @@ $(document)
                                 KotiRuutuToolKit.saveSearch($('input#search').val());
                                 $(this).fadeOut(200).fadeIn(50);
                             });
-
-
 
                     $('#guide-search').append($saveSearch, '</br>', $recordAll, '</br>', $deleteAll);
 
