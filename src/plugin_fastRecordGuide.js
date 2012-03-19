@@ -5,7 +5,7 @@ $(document)
                     KotiRuutuToolKitInit.addKotiRuutuMenu($(this));
 
                     var $showNextDay = $(
-                            '<span class="xtra_link"><a id="showNextDay" href="javascript:void(0)">Seuraava &gt;</a></span>')
+                            '<span class="xtra_link"><a id="showNextDay" href="javascript:void(0)"><img src="' + chrome.extension.getURL("images/right2.png") + '" width="30"></a></span>')
                             .click(
                                     function() {
                                         window.location = '/OmatSivut/Apps/Iptv/index.jsp?day='
@@ -14,7 +14,7 @@ $(document)
                                     });
 
                     var $showPreviousDay = $(
-                            '<span class="xtra_link"><a id="showPreviousDay" href="javascript:void(0)">&lt; Edellinen</a></span>')
+                            '<span class="xtra_link"><a id="showPreviousDay" href="javascript:void(0)"><img src="' + chrome.extension.getURL("images/left2.png") + '" width="30"></a></span>')
                             .click(
                                     function() {
                                         window.location = '/OmatSivut/Apps/Iptv/index.jsp?day='
@@ -24,7 +24,7 @@ $(document)
 
                     var $div = $('<div/>');
                     $div.addClass('showDays');
-                    $div.append($showPreviousDay, " ", $showNextDay);
+                    $div.append($showPreviousDay, "", $showNextDay);
 
                     $('#guide-day').after($div);
 

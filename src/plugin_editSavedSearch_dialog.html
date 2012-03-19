@@ -1,0 +1,95 @@
+<style>
+    label {vertical-align: top; width: 120px; display: inline-block}
+</style>
+
+<div id="editSavedSearchDialog" title="Muokkaa tallennettua hakua">
+    <form>
+        <fieldset>
+            <input type="hidden" name="krid" id="krid" value="" class="text ui-widget-content ui-corner-all" />
+            <label for="searchString">Hakusana*</label>
+            <input type="text" name="searchString" id="searchString" class="text ui-widget-content ui-corner-all" /><br/>
+            <!-- TODO channel choice menu käyttäjän kanavista -->
+            <label for="channel">Kanava</label>
+            <input type="text" name="channel" id="channel" value="" class="text ui-widget-content ui-corner-all" /><br/>
+            <label for="beginTime">Alkuaika (hh:mm)</label>
+            <input type="text" name="beginTime" id="beginTime" value="" class="text ui-widget-content ui-corner-all" /><br/>
+            <label for="durationInMin">+ nauhoitusjakso</label>
+            <select size="1" name="durationInMin" id="durationInMin" class="text select ui-widget-content ui-corner-all">
+                <option value="30">30 min</option>
+                <option value="60">60 min</option>
+                <option value="120">2 h</option>
+                <option value="180">3 h</option>
+                <option value="240">4 h</option>
+                <option value="300">5 h</option>
+                <option value="600">10 h</option>
+                <option value="720">12 h</option>                
+            </select><br/>
+            <label for="weekdays">Viikonpäivät</label>
+            <select multiple="multiple" size="7" name="weekdays" id="weekdays" class="text select ui-widget-content ui-corner-all">
+                <option value="1">Maanantai</option>
+                <option value="2">Tiistai</option>
+                <option value="3">Keskiviikko</option>
+                <option value="4">Torstai</option>
+                <option value="5">Perjantai</option>
+                <option value="6">Lauantai</option>
+                <option value="0">Sunnuntai</option>
+            </select>
+        </fieldset>
+    </form>
+</div>
+
+
+<script type="text/javascript">
+    var krid = $("#krid"), searchString = $("#searchString"), channel = $("#channel"), beginTime = $("#beginTime"), durationInMin = $("#durationInMin"), weekdays = $("#weekdays");
+    var allFields = $([]).add(krid).add(searchString).add(channel).add(beginTime).add(durationInMin).add(weekdays);
+
+    $("#editSavedSearchDialog").dialog(
+    {
+        autoOpen : false,
+        height : 380,
+        width : 350,
+        modal : true,
+        buttons : {
+            "Tallenna" : function() {
+                allFields.removeClass( "ui-state-error" );
+
+                if (searchString.val() == "")
+                {
+                    searchString.addClass( "ui-state-error" );
+                    return;
+                }
+                
+                if (beginTime.val() != "" && !KotiRuutuToolKit.validateTime(beginTime.val())){
+                    beginTime.addClass( "ui-state-error" );
+                    return;
+                }
+                
+                var newRec = KotiruutuRecording.createRec(krid.val(), searchString.val(), beginTime.val(), durationInMin
+                .val(), channel.val(), weekdays.val());
+                KotiRuutuToolKit.saveSearch(newRec);
+                $(this).dialog("close");
+
+            },
+            "Peruuta" : function() {
+                $(this).dialog("close");
+            }
+        },
+    close : function() {
+        allFields.val("").removeClass("ui-state-error");
+    }
+});
+
+var KotiRuutuToolKitRec = {
+    loadDataFromRec : function(rec) {
+        krid.val(rec[KR_ID]);
+        searchString.val(rec[KR_SEARCHSTRING]);
+        channel.val(rec[KR_CHANNEL]);
+        beginTime.val(rec[KR_BEGINTIME]);
+        durationInMin.val(rec[KR_DURATIONINMIN]);
+        weekdays.val(rec[KR_WEEKDAYS]);
+    },
+    initNew : function(str) {
+        searchString.val(str);
+    }
+};
+</script>

@@ -2,20 +2,26 @@ var KotiRuutuToolKitInit = {
 
     alterLinksSearch : function(customRoot) {
         $(customRoot).find('a[href*="javascript:Ui.openProgram"]').each(function() {
-            $(this).prop("programId", $(this).attr("href").substr(26, 7));
-
+            
             var programRow = $(this).parentsUntil('ul');
+            
+            var linkinfo = KotiruutuLinkInfo.createLinkInfo(
+                    undefined,
+                    programRow.find('.date > .value').get(0).innerText,
+                    programRow.find('.program > .value > strong').get(0).innerText,
+                    programRow.find('.time > .value').get(0).innerText,
+                    programRow.find('.duration > .value').get(0).innerText,
+                    programRow.find('.channel > .value').get(0).innerText,
+                    $(this).attr("href").substr(26, 7)
+            );
 
-            $(this).prop("date", programRow.find('.date > .value').get(0).innerText);
-            $(this).prop("programText", programRow.find('.program > .value > strong').get(0).innerText);
-            $(this).prop("time", programRow.find('.time > .value').get(0).innerText);
-            $(this).prop("duration", programRow.find('.duration > .value').get(0).innerText);
-            $(this).prop("channel", programRow.find('.channel > .value').get(0).innerText);
+            $(this).prop(KR_LINKINFO, linkinfo);
 
             $(this).attr("href", "javascript:void(0)");
             $(this).click(function() {
                 KotiRuutuToolKit.changeStatus($(this));
             });
+
         });
 
     },
@@ -24,28 +30,34 @@ var KotiRuutuToolKitInit = {
 
         $(customRoot).find('a[href*="javascript:Ui.openProgram"]').each(function() {
 
-            $(this).prop("programId", $(this).attr("href").substr(26, 7));
+            var linkinfo = KotiruutuLinkInfo.createLinkInfo(
+                    undefined,
+                    $(this).closest('#content').find('#guide-day > .day')[0].innerText.split(', ')[1].trim(),
+                    $(this).find('.title').get(0).innerText,
+                    $(this).find('.time').get(0).innerText,
+                    undefined,
+                    undefined,
+                    $(this).attr("href").substr(26, 7)
+            );
 
-            // Own cell
-            $(this).prop("programText", $(this).find('.title').get(0).innerText);
-            $(this).prop("time", $(this).find('.time').get(0).innerText);
-
-            // Date
-            $(this).prop("date", $(this).closest('#content').find('#guide-day > .day')[0].innerText.split(', ')[1].trim());
-            $(this).attr("href", "javascript:void(0)");
+            $(this).prop(KR_LINKINFO, linkinfo);
 
             var link = $(this);
 
             $(this).mouseover(function() {
-                if (link.prop("infoWindow") == undefined) {
-                    KotiRuutuToolKit.initProgramDetailsWindow(link, event);
-                } else {
+                if (link.prop("infoWindow") != undefined) {
                     link.prop("infoWindow").show();
+                } else {
+                    KotiRuutuToolKit.initProgramDetailsWindow(link, event);
                 }
             }).mouseout(function() {
-                link.prop("infoWindow").hide();
+                if (link.prop("infoWindow") != undefined) {
+                    link.prop("infoWindow").hide();
+                }
             }).mousemove(function() {
-                link.prop("infoWindow").move(event);
+                if (link.prop("infoWindow") != undefined) {
+                    link.prop("infoWindow").move(event);
+                }
             });
 
             $(this).click(function() {
@@ -58,16 +70,20 @@ var KotiRuutuToolKitInit = {
 
     alterLinksRecordings : function(customRoot) {
         $(customRoot).find('a[href*="javascript:Ui.confirmRemove"]').each(function() {
-            $(this).prop("programId", $(this).attr("href").substr(28, 7));
 
             var programRow = $(this).parentsUntil('ul');
+            
+            var linkinfo = KotiruutuLinkInfo.createLinkInfo(
+                    undefined,
+                    programRow.find('.date > .value').get(0).innerText,
+                    programRow.find('.program > .value > a').get(0).innerText,
+                    undefined,
+                    programRow.find('.duration > .value').get(0).innerText,
+                    programRow.find('.channel > .value').get(0).innerText,
+                    $(this).attr("href").substr(28, 7)
+            );
 
-            $(this).prop("date", programRow.find('.date > .value').get(0).innerText);
-            $(this).prop("programText", programRow.find('.program > .value > a').get(0).innerText);
-            // NA $(this).prop("time", programRow.find('.time >
-            // .value').get(0).innerText);
-            $(this).prop("duration", programRow.find('.duration > .value').get(0).innerText);
-            $(this).prop("channel", programRow.find('.channel > .value').get(0).innerText);
+            $(this).prop(KR_LINKINFO, linkinfo);            
 
             $(this).attr("href", "javascript:void(0)");
             $(this).click(function() {
@@ -82,16 +98,20 @@ var KotiRuutuToolKitInit = {
 
     alterLinksTimings : function(customRoot) {
         $(customRoot).find('a[href*="javascript:Ui.openProgram"]').each(function() {
-            $(this).prop("programId", $(this).attr("href").substr(26, 7));
-
+            
             var programRow = $(this).parentsUntil('ul');
 
-            $(this).prop("date", programRow.find('.date > .value').get(0).innerText);
-            $(this).prop("programText", programRow.find('.program > .value > a').get(0).innerText);
-            // NA $(this).prop("time", programRow.find('.time >
-            // .value').get(0).innerText);
-            $(this).prop("duration", programRow.find('.duration > .value').get(0).innerText);
-            $(this).prop("channel", programRow.find('.channel > .value').get(0).innerText);
+            var linkinfo = KotiruutuLinkInfo.createLinkInfo(
+                    undefined,
+                    programRow.find('.date > .value').get(0).innerText,
+                    programRow.find('.program > .value > a').get(0).innerText,
+                    undefined,
+                    programRow.find('.duration > .value').get(0).innerText,
+                    programRow.find('.channel > .value').get(0).innerText,
+                    $(this).attr("href").substr(26, 7)
+            );
+
+            $(this).prop(KR_LINKINFO, linkinfo);     
 
             $(this).attr("href", "javascript:void(0)");
             $(this).click(function() {
@@ -124,22 +144,22 @@ var KotiRuutuToolKitInit = {
                     KotiRuutuToolKit.showSavedSearch();
                     $(this).fadeOut(200).fadeIn(50);
                 });
-        
+
         var $editSavedSearch = $(
-        '<span class="xtra_link"><a id="editSavedSearch" href="?m=EditSavedSearch">Muokkaa tallennettuja hakuja</a></span>')
-        .click(function() {
-            $(this).fadeOut(200).fadeIn(50);
-        });        
+                '<span class="xtra_link"><a id="editSavedSearch" href="?m=EditSavedSearch">Muokkaa tallennettuja hakuja</a></span>')
+                .click(function() {
+                    $(this).fadeOut(200).fadeIn(50);
+                });
 
         var $clearSavedSearch = $(
                 '<span class="xtra_link"><a id="clearSavedSearch" href="javascript:void(0)">Tyhjennä tallennetut haut</a></span>')
                 .click(function() {
                     $(this).fadeOut(200).fadeIn(50);
-                    
+
                     if (confirm("Haluatko varmasti poistaa tallennetut haut?")) {
                         KotiRuutuToolKit.clearSavedSearch();
                     }
-                    
+
                 });
 
         var recordSearchResults = $(
@@ -159,7 +179,8 @@ var KotiRuutuToolKitInit = {
         $(customRoot).find('#content').prepend(
                 '<div id="toolkit_menu" style="width: 100%; text-align: center;"><span>KotiRuutu ToolKit MENU:</span>');
 
-        $(customRoot).find('#toolkit_menu').append($showSavedSearch, $editSavedSearch, $clearSavedSearch, recordSearchResults, deleteSearchResults);
+        $(customRoot).find('#toolkit_menu').append($showSavedSearch, $editSavedSearch, $clearSavedSearch, recordSearchResults,
+                deleteSearchResults);
     }
 
 };

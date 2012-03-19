@@ -45,7 +45,7 @@ var KotiRuutuToolKit = {
             url : this.compileDialogURL({
                 m : 'Dialog',
                 name : "Tip",
-                id : link.prop("programId")
+                id : link.prop(KR_LINKINFO)[KL_PROGRAMID]
             }),
             context : link,
             success : function(msg) {
@@ -72,7 +72,7 @@ var KotiRuutuToolKit = {
             url : this.compileDialogURL({
                 action : 'record',
                 storage : "network",
-                program : link.prop("programId")
+                program : link.prop(KR_LINKINFO)[KL_PROGRAMID]
             }),
             context : link,
             success : function(msg) {
@@ -99,7 +99,7 @@ var KotiRuutuToolKit = {
             url : this.compileDialogURL({
                 action : 'cancel',
                 storage : "network",
-                program : link.prop("programId")
+                program : link.prop(KR_LINKINFO)[KL_PROGRAMID]
             }),
             context : link,
             success : function(msg) {
@@ -126,7 +126,7 @@ var KotiRuutuToolKit = {
             url : this.compileDialogURL({
                 action : 'delete',
                 storage : "network",
-                program : link.prop("programId")
+                program : link.prop(KR_LINKINFO)[KL_PROGRAMID]
             }),
             context : link,
             success : function(msg) {
@@ -141,9 +141,6 @@ var KotiRuutuToolKit = {
     },
 
     showInfoFromLink : function(added, link) {
-        var date = link.prop('date');
-        var program = link.prop('programText');
-        var time = link.prop('time');
 
         var text;
         if (added == true) {
@@ -154,13 +151,12 @@ var KotiRuutuToolKit = {
             cssclass = 'removed';
         }
 
-        text += '&nbsp;&nbsp;' + date;
-        if (time != null) {
-            text += ' klo ' + time;
+        text += '&nbsp;&nbsp;' + link.prop(KR_LINKINFO)[KL_DATE];
+        if (link.prop(KR_LINKINFO)[KL_TIME] != null) {
+            text += ' klo ' + link.prop(KR_LINKINFO)[KL_TIME];
         }
-        text += ': <b>' + program + '</b>';
-        ;
-
+        text += ': <b>' + link.prop(KR_LINKINFO)[KL_PROGRAMTEXT] + '</b>';
+       
         $.pnotify({
             pnotify_text : text,
             pnotify_animation : {
@@ -189,33 +185,41 @@ var KotiRuutuToolKit = {
         return link.hasClass("network") || link.prop("innerText") == "Peruuta";
     },
 
-    saveSearch : function(searchString) {
-        var db = new Object();
-        if (localStorage.searchStrings == undefined) {
-            db.data = new Array(searchString);
-        } else {
-            db = JSON.parse(localStorage.searchStrings);
+    /**
+     * @param newRec
+     *            KotiruutuRecording
+     */
+    saveSearch : function(newRec) {
 
-            if ($.inArray(searchString, db.data) == -1) {
-                db.data.push(searchString);
+        var db = getRecLocalStorage();
+
+        var replaceIndex = undefined;
+        $.each(db, function(searchIndex, searchValue) {
+            if (searchValue[KR_ID] == newRec[KR_ID]) {
+                replaceIndex = searchIndex;
             }
+        });
+
+        if (replaceIndex != undefined) {
+            db.splice(replaceIndex,1,newRec);
+        } else {
+            db.push(newRec);
         }
 
-        localStorage.searchStrings = JSON.stringify(db);
+        setRecLocalStorage(db);
 
         $.pnotify({
             pnotify_title : "Hakusana tallennettu",
-            pnotify_text : searchString,
+            pnotify_text : newRec[KR_SEARCHSTRING],
             pnotify_animation : {
                 effect_in : 'show',
                 effect_out : 'slide'
             }
         });
-
     },
 
     clearSavedSearch : function() {
-        localStorage.removeItem("searchStrings");
+        initRecLocalStorage();
 
         $.pnotify({
             pnotify_text : "Tallennetut haut poistettu!",
@@ -229,7 +233,7 @@ var KotiRuutuToolKit = {
     },
 
     showSavedSearch : function() {
-        if (localStorage.searchStrings == undefined) {
+        if (isRecLocalStorageEmpty()) {
             $.pnotify({
                 pnotify_text : "Ei tallennettuja hakuja!",
                 pnotify_animation : {
@@ -239,10 +243,10 @@ var KotiRuutuToolKit = {
                 pnotify_type : 'error'
             });
         } else {
-            var db = JSON.parse(localStorage.searchStrings);
+            var db = getRecLocalStorage();
             var msg = "";
-            $.each(db.data, function(index, value) {
-                msg += "      " + (index + 1) + '. ' + value + "\n";
+            $.each(db, function(index, value) {
+                msg += value[KR_SEARCHSTRING] + "\n";
             });
 
             $.pnotify({
@@ -258,7 +262,7 @@ var KotiRuutuToolKit = {
     },
 
     recordSearchResults : function() {
-        if (localStorage.searchStrings == undefined) {
+        if (isRecLocalStorageEmpty()) {
             $.pnotify({
                 pnotify_text : "Ei tallennettuja hakuja!",
                 pnotify_animation : {
@@ -268,12 +272,12 @@ var KotiRuutuToolKit = {
                 pnotify_type : 'error'
             });
         } else {
-            var db = JSON.parse(localStorage.searchStrings);
-            $.each(db.data, function(index, value) {
+            var db = getRecLocalStorage();
+            $.each(db, function(index, value) {
 
                 $.pnotify({
                     pnotify_title : 'Tallennetun haun automaattinen nauhoitus',
-                    pnotify_text : '<span class="added">+</span> ' + value + ' hakusanalla',
+                    pnotify_text : '<span class="added">+</span> ' + value[KR_SEARCHSTRING] + ' hakusanalla',
                     pnotify_animation : {
                         effect_in : 'show',
                         effect_out : 'slide'
@@ -285,23 +289,24 @@ var KotiRuutuToolKit = {
         }
     },
 
-    recordSearchResult : function(searchString) {
-        var iframeName = 'recordSearchResult_' + searchString;
+    recordSearchResult : function(rec) {
+        var iframeName = 'recordSearchResult_' + rec[KR_ID];
 
         $('<iframe />', {
             "name" : iframeName,
             "id" : iframeName,
-            "src" : "index.jsp?m=Search&search=" + escape(searchString)
+            "src" : "index.jsp?m=Search&search=" + escape(rec[KR_SEARCHSTRING])
         }).appendTo('body').load(function() {
             KotiRuutuToolKitInit.alterLinksSearch($(this.contentDocument).find('body'));
-            KotiRuutuToolKit.recordAll($(this.contentDocument).find('body'));
+            KotiRuutuToolKit.recordAll($(this.contentDocument).find('body'), rec);
             $('#' + iframeName).remove();
         });
 
     },
 
     deleteSearchResults : function() {
-        if (localStorage.searchStrings == undefined) {
+        
+        if (isRecLocalStorageEmpty()) {
             $.pnotify({
                 pnotify_text : "Ei tallennettuja hakuja!",
                 pnotify_animation : {
@@ -311,12 +316,13 @@ var KotiRuutuToolKit = {
                 pnotify_type : 'error'
             });
         } else {
-            var db = JSON.parse(localStorage.searchStrings);
-            $.each(db.data, function(index, value) {
+            
+            var db = getRecLocalStorage();
+            $.each(db, function(index, value) {
 
                 $.pnotify({
                     pnotify_title : 'Tallennetun haun automaattinen ajatuksien poisto',
-                    pnotify_text : '<span class="removed">-</span> ' + value + ' hakusanalla',
+                    pnotify_text : '<span class="removed">-</span> ' + value[KR_SEARCHSTRING] + ' hakusanalla',
                     pnotify_animation : {
                         effect_in : 'show',
                         effect_out : 'slide'
@@ -328,39 +334,43 @@ var KotiRuutuToolKit = {
         }
     },
 
-    deleteSearchResult : function(str) {
-        var iframeName = 'deleteSearchResult_' + str;
+    deleteSearchResult : function(rec) {
+        var iframeName = 'deleteSearchResult_' + rec[KR_ID];
 
         $('<iframe />', {
             "name" : iframeName,
             "id" : iframeName,
-            "src" : "index.jsp?m=Search&search=" + escape(str)
+            "src" : "index.jsp?m=Search&search=" + escape(rec[KR_SEARCHSTRING])
         }).appendTo('body').load(function() {
             KotiRuutuToolKitInit.alterLinksSearch($(this.contentDocument).find('body'));
-            KotiRuutuToolKit.deleteAllTimings($(this.contentDocument).find('body'));
+            KotiRuutuToolKit.deleteAllTimings($(this.contentDocument).find('body'), rec);
             $('#' + iframeName).remove();
         });
 
     },
 
-    recordAll : function(customRoot) {
-        $(customRoot).find('a[programId != ""]').each(function(index, link) {
+    recordAll : function(customRoot, rec) {
+        $(customRoot).find('a[KR_LINKINFO != undefined]').each(function(index, link) {
             if (KotiRuutuToolKit.isNewRecording($(link))) {
-                KotiRuutuToolKit.recordProgram($(link));
+                if (rec == undefined  || KotiruutuRecording.isMatch(rec, $(link))) {
+                    KotiRuutuToolKit.recordProgram($(link));
+                }
             }
         });
     },
 
-    deleteAllTimings : function(customRoot) {
-        $(customRoot).find('a[programId != ""]').each(function(index, link) {
+    deleteAllTimings : function(customRoot, rec) {
+        $(customRoot).find('a[KR_LINKINFO != undefined]').each(function(index, link) {
             if (KotiRuutuToolKit.isTimedRecording($(link))) {
-                KotiRuutuToolKit.removeTiming($(link));
+                if (rec == undefined  || KotiruutuRecording.isMatch(rec, $(link))) {
+                    KotiRuutuToolKit.removeTiming($(link));
+                }
             }
         });
     },
 
     deleteAllRecordings : function(customRoot) {
-        $(customRoot).find('a[programId != ""]').each(function(index, link) {
+        $(customRoot).find('a[KR_LINKINFO != undefined]').each(function(index, link) {
             KotiRuutuToolKit.removeRecording($(link));
         });
     },
@@ -368,6 +378,17 @@ var KotiRuutuToolKit = {
     getCurrentDateStampForGuide : function() {
         var currentLink = $('#guide-day').find('.days > .selected').get(0);
         return Number(currentLink.href.split('day=')[1]);
+    },
+    
+    validateTime : function(input) {
+        return Date.parseExact(input, [
+            "H:m",
+            "h:mt",
+            "h:m t",
+            "ht","h t"]) != null ||
+            Date.parseExact(input, [
+            "h:mtt",
+            "h:m tt",
+            "htt","h tt"]) != null;
     }
-
 };

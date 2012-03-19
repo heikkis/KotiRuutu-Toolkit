@@ -22,10 +22,14 @@ $(document)
                     var $saveSearch = $(
                             '<span class="xtra_link"><a id="saveSearch" href="javascript:void(0)">Tallenna hakusana</a></span>')
                             .click(function() {
-                                KotiRuutuToolKit.saveSearch($('input#search').val());
+                                KotiRuutuToolKitRec.initNew($('input#search').val());
+                                $("#editSavedSearchDialog").dialog('open');
                                 $(this).fadeOut(200).fadeIn(50);
                             });
 
                     $('#guide-search').append($saveSearch, '</br>', $recordAll, '</br>', $deleteAll);
+
+                    $("body").append("<div id='savedSearchDialog' style=''/>");
+                    $("#savedSearchDialog").load(chrome.extension.getURL("plugin_editSavedSearch_dialog.html"));
 
                 });

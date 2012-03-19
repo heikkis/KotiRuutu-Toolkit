@@ -1,6 +1,6 @@
 {
   "name": "KotiRuutu ToolKit",
-  "version": "3.5",
+  "version": "4.0",
   "description": "Lisätoimintoja nauhoituksien tekemiseen helpommin. Yhteensopiva Sonera KotiTV-palvelun Web-sivuston kanssa.",
   "content_scripts": [
     {
@@ -8,29 +8,39 @@
       "js": ["plugin_redirect.js"]
     },
     {
+      "matches": ["https://*.sonera.fi/OmatSivut/Apps/Iptv/*"],
+      "css": ["plugin_css.css", "jnotify/jquery.pnotify.default.css", "jquery-ui/jquery-ui-1.8.18.custom.css"],
+      "js": ["jquery/jquery-1.7.1.min.js",
+      		"jquery-ui/jquery-ui-1.8.18.custom.min.js",
+      		"jnotify/jquery.pnotify.min.js",
+      		"datejs/date-fi-FI.js",
+      		"class/class.js",
+      		"plugin_settings.js",
+      		"plugin_kotiruuturecording.js",
+      		"plugin_linkinfo.js",
+      		"plugin_lib.js",
+      		"plugin_compatible.js",
+      		"plugin_lib_init.js"]
+    },
+    {
       "matches": ["https://*.sonera.fi/OmatSivut/Apps/Iptv/index.jsp","https://*.sonera.fi/OmatSivut/Apps/Iptv/index.jsp?m=Guide","https://*.sonera.fi/OmatSivut/Apps/Iptv/index.jsp?day=*"],
-      "css": ["plugin_css.css", "jnotify/jquery.pnotify.default.css"],
-      "js": ["json/json.js", "jquery/jquery-1.7.1.min.js", "jnotify/jquery.pnotify.min.js", "plugin_lib.js", "plugin_lib_init.js", "plugin_fastRecordGuide.js"]
+      "js": ["plugin_fastRecordGuide.js"]
     },
     {
       "matches": ["https://*.sonera.fi/OmatSivut/Apps/Iptv/index.jsp?m=Search&search=*"],
-      "css": ["plugin_css.css", "jnotify/jquery.pnotify.default.css"],
-      "js": ["json/json.js", "jquery/jquery-1.7.1.min.js", "jnotify/jquery.pnotify.min.js", "plugin_lib.js", "plugin_lib_init.js", "plugin_fastRecordSearch.js"]
+      "js": ["plugin_fastRecordSearch.js"]
     },
     {
       "matches": ["https://*.sonera.fi/OmatSivut/Apps/Iptv/index.jsp?m=Recordings"],
-      "css": ["plugin_css.css", "jnotify/jquery.pnotify.default.css"],
-      "js": ["json/json.js", "jquery/jquery-1.7.1.min.js", "jnotify/jquery.pnotify.min.js", "plugin_lib.js", "plugin_lib_init.js", "plugin_fastDeleteRecording.js"]
+      "js": ["plugin_fastDeleteRecording.js"]
     },
     {
       "matches": ["https://*.sonera.fi/OmatSivut/Apps/Iptv/index.jsp?m=Upcoming"],
-      "css": ["plugin_css.css", "jnotify/jquery.pnotify.default.css"],
-      "js": ["json/json.js", "jquery/jquery-1.7.1.min.js", "jnotify/jquery.pnotify.min.js", "plugin_lib.js", "plugin_lib_init.js", "plugin_fastDeleteTiming.js"]
+      "js": ["plugin_fastDeleteTiming.js"]
     },
     {
       "matches": ["https://*.sonera.fi/OmatSivut/Apps/Iptv/index.jsp?m=EditSavedSearch"],
-      "css": ["plugin_css.css", "jnotify/jquery.pnotify.default.css"],
-      "js": ["json/json.js", "jquery/jquery-1.7.1.min.js", "jnotify/jquery.pnotify.min.js", "plugin_lib.js", "plugin_lib_init.js", "plugin_editSavedSearch.js"]
+      "js": ["plugin_editSavedSearch.js"]
     }
   ]
 }
