@@ -3,13 +3,16 @@ function reloadFromDB() {
     $('#editSearchList').empty();
     
     var rowDB = getRecLocalStorage();
+    
     $.each(rowDB, function(rowIndex, rowValue) {
         var searchTerm = $("<div id=\"searchterm_" + (rowValue[KR_ID]) + "\">" + (rowIndex + 1) + '. '
             + rowValue[KR_SEARCHSTRING] + " - </div>");
+        
         var removeLink = $("<a href=\"javascript:void(0)\">Poista</a>").click(function() {
 
             var searchDB = getRecLocalStorage();
             var removeIndex = null;
+
             $.each(searchDB, function(searchIndex, searchValue) {
                 if (searchValue[KR_ID] === rowValue[KR_ID]) {
                     removeIndex = searchIndex;
@@ -29,6 +32,7 @@ function reloadFromDB() {
 
             var searchDB = getRecLocalStorage();
             var editRec = undefined;
+            
             $.each(searchDB, function(searchIndex, searchValue) {
                 if (searchValue[KR_ID] === rowValue[KR_ID]) {
                     editRec = searchValue;
@@ -36,7 +40,7 @@ function reloadFromDB() {
             });
 
             if (editRec != undefined) {
-                KotiRuutuToolKitRec.loadDataFromRec(editRec);
+                KotiRuutuToolKitRec.loadDataFromRec(editRec);           
                 $("#editSavedSearchDialog").dialog('open');
             }
         });
@@ -52,25 +56,19 @@ $(document)
             KotiRuutuToolKitInit.addKotiRuutuMenu($(this));
                     
             $("#guide-day").remove();
-//            $("#guide-search").remove();
             $("#guide-slider").remove();
             $("#channels").remove();
-//            $(".header").remove();
             
             var saveSearch = $(
                 '<span class="xtra_link"><a id="saveSearch" href="javascript:void(0)">Lisää uusi hakusana</a></span><br/><br/>')
-            .click(function() {
+            .click(function() {             
                 $("#editSavedSearchDialog").dialog('open');
                 $(this).fadeOut(200).fadeIn(50);
-                $("#editSavedSearchDialog").bind( "dialogbeforeclose", function(event, ui) {
-                    reloadFromDB();
-                });
             });
                         
             var div = $('<div align="center" style="width: 100%;">');
             div.append(saveSearch);
             $('#content').append(div);
-
 
             if (isRecLocalStorageEmpty()) {
                 $.pnotify({
@@ -88,12 +86,16 @@ $(document)
                     '<div align="center" style="width: 100%;">'
                     + '<div style="text-align: left; width:250px; margin-left: auto; margin-right: auto;"'
                     + ' id=\"editSearchList\"><br/><br/><div align="center"><b>Tallennetut hakusanat</b></div><br/></div></div>');
-
                  
                 reloadFromDB();
                 
                 $("body").append("<div id='savedSearchDialog' style=''/>");
-                $("#savedSearchDialog").load(chrome.extension.getURL("plugin_editSavedSearch_dialog.html"));
+                $("#savedSearchDialog").load(chrome.extension.getURL("plugin_editSavedSearch_dialog.html"), function() {
+                    $("#editSavedSearchDialog").bind( "dialogbeforeclose", function(event, ui) {
+                        reloadFromDB();
+                    });   
+                });
+
             }
 
         });
