@@ -339,7 +339,7 @@ var KotiRuutuToolKit = {
         $('<iframe />', {
             "name" : iframeName,
             "id" : iframeName,
-            "style" : "width: 1px; height: 1px;",           
+            "style" : "width: 0px; height: 0px; position:fixed; top: 0px; z-index: -5;",           
             "src" : "index.jsp?m=Search&search=" + (rec[KR_SEARCHSTRING])
         }).appendTo('body').load(function() {
             KotiRuutuToolKitInit.alterLinksSearch($(this.contentDocument).find('body'));
@@ -389,7 +389,7 @@ var KotiRuutuToolKit = {
         $('<iframe />', {
             "name" : iframeName,
             "id" : iframeName,
-            "style" : "width: 1px; height: 1px;",
+            "style" : "width: 0px; height: 0px; position:fixed; top: 0px; z-index: -5;",
             "src" : "index.jsp?m=Search&search=" + (rec[KR_SEARCHSTRING])
         }).appendTo('body').load(function() {
             KotiRuutuToolKitInit.alterLinksSearch($(this.contentDocument).find('body'));
