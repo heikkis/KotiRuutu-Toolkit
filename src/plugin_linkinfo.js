@@ -5,6 +5,7 @@ var KL_TIME = 3;
 var KL_DURATION = 4;
 var KL_CHANNEL = 5;
 var KL_PROGRAMID = 6;
+var KL_DESCRIPTION = 7;
 
 var KR_LINKINFO = "KR_LINKINFO";
 
@@ -13,7 +14,7 @@ var KotiruutuLinkInfo = {
     /**
      * 
      */
-    createLinkInfo : function(id, date, programText, time, duration, channel, programId) {
+    createLinkInfo : function(id, date, programText, time, duration, channel, programId, desc) {
 
         var link = new Array();
         
@@ -29,6 +30,7 @@ var KotiruutuLinkInfo = {
         link[KL_DURATION] = duration;
         link[KL_CHANNEL] = channel;
         link[KL_PROGRAMID] = programId;
+        link[KL_DESCRIPTION] = desc;
        
         return link;
     }

@@ -5,7 +5,7 @@ $(document)
                     KotiRuutuToolKitInit.addKotiRuutuMenu($(this));
 
                     var $deleteAll = $(
-                            '<div class="xtra_link" style="width:100%; text-align:center"><a id="deleteAll" href="javascript:void(0)"><span class="removed">-</span><b> Poista kaikki tallennukset</b></a></div>')
+                            '<div class="xtra_link" style="width:100%; text-align:center"><a id="deleteAll" href="javascript:void(0)"><img src="' + chrome.extension.getURL("images/remove_16x16.png") + '"><b> Poista kaikki tallennukset</b></a></div>')
                             .click(function() {
 
                                 if (confirm("Haluatko varmasti poistaa kaikki tallennukset?")) {

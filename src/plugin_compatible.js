@@ -8,7 +8,7 @@ $(document).ready(function() {
 
         var db = JSON.parse(localStorage.searchStrings);
         $.each(db.data, function(index, value) {
-            var newRec = new KotiruutuRecording(value, "", "", "", null);
+            var newRec = KotiruutuRecording.createRec(null, value, "", "", "", null);
             KotiRuutuToolKit.saveSearch(newRec);
         });
 

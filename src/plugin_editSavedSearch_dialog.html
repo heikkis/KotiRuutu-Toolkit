@@ -2,7 +2,9 @@
     label {vertical-align: top; width: 120px; display: inline-block}
 </style>
 
-<div id="editSavedSearchDialog" title="Muokkaa tallennettua hakua">
+<div id="editSavedSearchDialog" title="Tallennetun haun asetukset">
+    <span style="font-size: 80%">&nbsp;&nbsp;&nbsp;<b>Vain hakusana on pakollinen tieto</b>. Hakutuloksista nauhoitetaan kaikki tulokset tai vain ne, jotka täsmäävät <b>määriteltyihin valinnaisiin lisärajoitteisiin</b>.<br/>
+    &nbsp;&nbsp;&nbsp;Ajastusjakso tarkoittaa sitä, että esimerkiksi jos alkuaikana 23:00 ja 2 h ajastusjakso niin ajastetaan haun ohjelmat, jotka <b>alkavat</b> on kello 23:00 ja (+1 pv) 1:00 välillä.</span>    
     <form>
         <fieldset>
             <input type="hidden" name="krid" id="krid" value="" class="text ui-widget-content ui-corner-all" />
@@ -13,10 +15,10 @@
             <input type="text" name="channel" id="channel" value="" class="text ui-widget-content ui-corner-all" /><br/>
             <label for="beginTime">Alkuaika (hh:mm)</label>
             <input type="text" name="beginTime" id="beginTime" value="" class="text ui-widget-content ui-corner-all" /><br/>
-            <label for="durationInMin">+ nauhoitusjakso</label>
+            <label for="durationInMin">+ ajastusjakso</label>
             <select size="1" name="durationInMin" id="durationInMin" class="text select ui-widget-content ui-corner-all">
                 <option value="30">30 min</option>
-                <option value="60">60 min</option>
+                <option value="60">1 h</option>
                 <option value="120">2 h</option>
                 <option value="180">3 h</option>
                 <option value="240">4 h</option>
@@ -46,8 +48,8 @@
     $("#editSavedSearchDialog").dialog(
     {
         autoOpen : false,
-        height : 380,
-        width : 350,
+        height : 460,
+        width : 500,
         modal : true,
         buttons : {
             "Tallenna" : function() {
@@ -74,22 +76,25 @@
                 $(this).dialog("close");
             }
         },
-    close : function() {
-        allFields.val("").removeClass("ui-state-error");
-    }
-});
+        close : function() {
+            allFields.val("").removeClass("ui-state-error");
+        },
+        open : function () {
+            $('.ui-widget-overlay').bind('click', function () { $(this).siblings('.ui-dialog').find('.ui-dialog-content').dialog('close'); });
+        }
+    });
 
-var KotiRuutuToolKitRec = {
-    loadDataFromRec : function(rec) {
-        krid.val(rec[KR_ID]);
-        searchString.val(rec[KR_SEARCHSTRING]);
-        channel.val(rec[KR_CHANNEL]);
-        beginTime.val(rec[KR_BEGINTIME]);
-        durationInMin.val(rec[KR_DURATIONINMIN]);
-        weekdays.val(rec[KR_WEEKDAYS]);
-    },
-    initNew : function(str) {
-        searchString.val(str);
-    }
-};
+    var KotiRuutuToolKitRec = {
+        loadDataFromRec : function(rec) {
+            krid.val(rec[KR_ID]);
+            searchString.val(rec[KR_SEARCHSTRING]);
+            channel.val(rec[KR_CHANNEL]);
+            beginTime.val(rec[KR_BEGINTIME]);
+            durationInMin.val(rec[KR_DURATIONINMIN]);
+            weekdays.val(rec[KR_WEEKDAYS]);
+        },
+        initNew : function(str) {
+            searchString.val(str);
+        }
+    };
 </script>

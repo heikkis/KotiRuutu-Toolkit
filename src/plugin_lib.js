@@ -40,6 +40,8 @@ var KotiRuutuToolKit = {
         $("body").append($div);
         link.prop("infoWindow", $div);
 
+        KotiRuutuToolKit.newBackgroundCall();
+
         $.ajax({
             type : "GET",
             url : this.compileDialogURL({
@@ -48,6 +50,9 @@ var KotiRuutuToolKit = {
                 id : link.prop(KR_LINKINFO)[KL_PROGRAMID]
             }),
             context : link,
+            complete : function() {
+                KotiRuutuToolKit.endBackgroundCall();
+            },
             success : function(msg) {
                 var text = JSON.parse(msg).html;
                 $div.append(text);
@@ -60,13 +65,37 @@ var KotiRuutuToolKit = {
         var url = 'index.jsp?m=Dialog&name=Api';
         for ( var i in params) {
             if (typeof params[i] != 'function')
-                url += '&' + i + '=' + escape(params[i]);
+                url += '&' + i + '=' + params[i];
         }
 
         return url;
     },
 
+    newBackgroundCall : function () {
+        if ($("#background_status").prop("counter") === 0) {
+            $("#background_status").prop("counter", 1);
+            $("#background_status").prop("src",chrome.extension.getURL("images/waiting_32x32.png"));            
+        } else {
+            $("#background_status").prop("counter", $("#background_status").prop("counter")+1);
+        }
+        $("#background_status_counter").html($("#background_status").prop("counter"));
+    },
+    
+    endBackgroundCall : function () {
+        if ($("#background_status").prop("counter") === 1) {
+            $("#background_status").prop("counter", 0);
+            $("#background_status").prop("src",chrome.extension.getURL("images/ready_32x32.png"));
+            $("#background_status_counter").html('');
+        } else {
+            $("#background_status").prop("counter", $("#background_status").prop("counter")-1);
+            $("#background_status_counter").html($("#background_status").prop("counter"));
+        }
+        
+    },
+
     recordProgram : function(link) {
+        KotiRuutuToolKit.newBackgroundCall();
+        
         $.ajax({
             type : "GET",
             url : this.compileDialogURL({
@@ -75,6 +104,9 @@ var KotiRuutuToolKit = {
                 program : link.prop(KR_LINKINFO)[KL_PROGRAMID]
             }),
             context : link,
+            complete : function() {
+                KotiRuutuToolKit.endBackgroundCall();
+            },
             success : function(msg) {
                 var status = JSON.parse(msg).data.result;
 
@@ -94,6 +126,8 @@ var KotiRuutuToolKit = {
     },
 
     removeTiming : function(link) {
+        KotiRuutuToolKit.newBackgroundCall();
+        
         $.ajax({
             type : "GET",
             url : this.compileDialogURL({
@@ -102,6 +136,9 @@ var KotiRuutuToolKit = {
                 program : link.prop(KR_LINKINFO)[KL_PROGRAMID]
             }),
             context : link,
+            complete : function() {
+                KotiRuutuToolKit.endBackgroundCall();
+            },            
             success : function(msg) {
                 var status = JSON.parse(msg).data.result;
 
@@ -121,6 +158,8 @@ var KotiRuutuToolKit = {
     },
 
     removeRecording : function(link) {
+        KotiRuutuToolKit.newBackgroundCall();
+        
         $.ajax({
             type : "GET",
             url : this.compileDialogURL({
@@ -129,6 +168,9 @@ var KotiRuutuToolKit = {
                 program : link.prop(KR_LINKINFO)[KL_PROGRAMID]
             }),
             context : link,
+            complete : function() {
+                KotiRuutuToolKit.endBackgroundCall();
+            },
             success : function(msg) {
                 var status = JSON.parse(msg).data.result;
 
@@ -145,9 +187,9 @@ var KotiRuutuToolKit = {
         var text;
         if (added == true) {
             cssclass = "added";
-            text = '<span class="added">+</span>';
+            text = '<span class="added"><img src="' + chrome.extension.getURL("images/added_16x16.png") + '"></span>';
         } else {
-            text = '<span class="removed">-</span>';
+            text = '<span class="removed"><img src="' + chrome.extension.getURL("images/removed_16x16.png") + '"></span>';
             cssclass = 'removed';
         }
 
@@ -292,14 +334,19 @@ var KotiRuutuToolKit = {
     recordSearchResult : function(rec) {
         var iframeName = 'recordSearchResult_' + rec[KR_ID];
 
+        KotiRuutuToolKit.newBackgroundCall();
+        
         $('<iframe />', {
             "name" : iframeName,
             "id" : iframeName,
-            "src" : "index.jsp?m=Search&search=" + escape(rec[KR_SEARCHSTRING])
+            "style" : "width: 1px; height: 1px;",           
+            "src" : "index.jsp?m=Search&search=" + (rec[KR_SEARCHSTRING])
         }).appendTo('body').load(function() {
             KotiRuutuToolKitInit.alterLinksSearch($(this.contentDocument).find('body'));
             KotiRuutuToolKit.recordAll($(this.contentDocument).find('body'), rec);
             $('#' + iframeName).remove();
+            
+            KotiRuutuToolKit.endBackgroundCall();
         });
 
     },
@@ -337,21 +384,25 @@ var KotiRuutuToolKit = {
     deleteSearchResult : function(rec) {
         var iframeName = 'deleteSearchResult_' + rec[KR_ID];
 
+        KotiRuutuToolKit.newBackgroundCall();
+        
         $('<iframe />', {
             "name" : iframeName,
             "id" : iframeName,
-            "src" : "index.jsp?m=Search&search=" + escape(rec[KR_SEARCHSTRING])
+            "style" : "width: 1px; height: 1px;",
+            "src" : "index.jsp?m=Search&search=" + (rec[KR_SEARCHSTRING])
         }).appendTo('body').load(function() {
             KotiRuutuToolKitInit.alterLinksSearch($(this.contentDocument).find('body'));
             KotiRuutuToolKit.deleteAllTimings($(this.contentDocument).find('body'), rec);
             $('#' + iframeName).remove();
+            KotiRuutuToolKit.endBackgroundCall();
         });
 
     },
 
     recordAll : function(customRoot, rec) {
-        $(customRoot).find('a[KR_LINKINFO != undefined]').each(function(index, link) {
-            if (KotiRuutuToolKit.isNewRecording($(link))) {
+        $(customRoot).find('a').each(function(index, link) {
+            if ($(link).prop(KR_LINKINFO) != undefined && KotiRuutuToolKit.isNewRecording($(link))) {
                 if (rec == undefined  || KotiruutuRecording.isMatch(rec, $(link))) {
                     KotiRuutuToolKit.recordProgram($(link));
                 }
@@ -360,8 +411,8 @@ var KotiRuutuToolKit = {
     },
 
     deleteAllTimings : function(customRoot, rec) {
-        $(customRoot).find('a[KR_LINKINFO != undefined]').each(function(index, link) {
-            if (KotiRuutuToolKit.isTimedRecording($(link))) {
+        $(customRoot).find('a').each(function(index, link) {
+            if ($(link).prop(KR_LINKINFO) != undefined && KotiRuutuToolKit.isTimedRecording($(link))) {
                 if (rec == undefined  || KotiruutuRecording.isMatch(rec, $(link))) {
                     KotiRuutuToolKit.removeTiming($(link));
                 }
@@ -370,7 +421,7 @@ var KotiRuutuToolKit = {
     },
 
     deleteAllRecordings : function(customRoot) {
-        $(customRoot).find('a[KR_LINKINFO != undefined]').each(function(index, link) {
+        $(customRoot).find('a[KR_LINKINFO]').each(function(index, link) {
             KotiRuutuToolKit.removeRecording($(link));
         });
     },
@@ -386,7 +437,7 @@ var KotiRuutuToolKit = {
             "h:mt",
             "h:m t",
             "ht","h t"]) != null ||
-            Date.parseExact(input, [
+        Date.parseExact(input, [
             "h:mtt",
             "h:m tt",
             "htt","h tt"]) != null;
