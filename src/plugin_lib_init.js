@@ -162,22 +162,17 @@ var KotiRuutuToolKitInit = {
             }   
             $(this).fadeOut(200).fadeIn(50);
         });
-                
-        var backgroundStatus = $(
-            '<span style="position:fixed; top: 10px; left: 220px;"><img src="' + chrome.extension.getURL("images/ready_32x32.png") + '" id="background_status"/><span id="background_status_counter" /></span>');
-
-        $("body").append(backgroundStatus);
 
         var menuSpan = $('<span><b>KotiRuutu ToolKit MENU:</b></span>');
-        
         $(customRoot).find('#content').prepend(
             '<div id="toolkit_menu" style="font-size: 120%; height: 50px; width: 100%; text-align: center; padding-top: 10px;">');
 
-
-
         $(customRoot).find('#toolkit_menu').append(menuSpan, editSavedSearch, recordSearchResults,
             deleteSearchResults);
-                
-        $(customRoot).find("#background_status").prop("counter", 0);                
-    }
+                        
+        var backgroundStatus = $(
+            '<span style="position:fixed; top: 10px; left: 220px;"><img src="' + chrome.extension.getURL("images/ready_32x32.png") + '" id="background_status"/><span id="background_status_counter" /></span>');
+        $("body").append(backgroundStatus);
+        $(customRoot).find("#background_status").prop("counter", 0);
+     }
 };
