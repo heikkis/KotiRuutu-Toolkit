@@ -1,9 +1,10 @@
 <style>
-    label {vertical-align: top; width: 120px; display: inline-block}
+    label {vertical-align: top; width: 150px; display: inline-block; font-weight: bold;}
+    input, select {width: 250px}
 </style>
 
 <div id="editSavedSearchDialog" title="Tallennetun haun asetukset">
-    <span style="font-size: 80%">&nbsp;&nbsp;&nbsp;<b>Vain hakusana on pakollinen tieto</b>. Hakutuloksista nauhoitetaan kaikki tulokset tai vain ne, jotka täsmäävät <b>määriteltyihin valinnaisiin lisärajoitteisiin</b>.<br/>
+    <span style="font-size: 80%">&nbsp;&nbsp;&nbsp;<b>Vain hakusana (ohjelman nimi tai osa siitä) on pakollinen tieto</b>. Hakutuloksista nauhoitetaan kaikki tulokset tai vain ne, jotka täsmäävät <b>määriteltyihin valinnaisiin lisärajoitteisiin</b>.<br/>
     &nbsp;&nbsp;&nbsp;Ajastusjakso tarkoittaa sitä, että esimerkiksi jos alkuaikana 23:00 ja 2 h ajastusjakso niin ajastetaan haun ohjelmat, jotka <b>alkavat</b> on kello 23:00 ja (+1 pv) 1:00 välillä.</span>    
     <form>
         <fieldset>
@@ -14,7 +15,7 @@
             <label for="channel">Kanava</label>
             <input type="text" name="channel" id="channel" value="" class="text ui-widget-content ui-corner-all" /><br/>
             <label for="beginTime">Alkuaika (hh:mm)</label>
-            <input type="text" name="beginTime" id="beginTime" value="" class="text ui-widget-content ui-corner-all" /><br/>
+            <input type="text" name="beginTime" id="beginTime" maxlength="5" value="" class="text ui-widget-content ui-corner-all" /><br/>
             <label for="durationInMin">+ ajastusjakso</label>
             <select size="1" name="durationInMin" id="durationInMin" class="text select ui-widget-content ui-corner-all">
                 <option value="0">Täsmänauhoitus</option>
@@ -49,7 +50,7 @@
     $("#editSavedSearchDialog").dialog(
     {
         autoOpen : false,
-        height : 460,
+        height : 480,
         width : 500,
         modal : true,
         buttons : {
