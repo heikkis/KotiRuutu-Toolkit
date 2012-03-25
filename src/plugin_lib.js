@@ -205,7 +205,7 @@ var KotiRuutuToolKit = {
                 effect_in : 'show',
                 effect_out : 'slide'
             },
-            pnotify_delay : 4000
+            pnotify_delay : 2000
         });
     },
 
@@ -256,7 +256,8 @@ var KotiRuutuToolKit = {
             pnotify_animation : {
                 effect_in : 'show',
                 effect_out : 'slide'
-            }
+            },
+            pnotify_delay : 3000
         });
     },
 
@@ -269,7 +270,7 @@ var KotiRuutuToolKit = {
                 effect_in : 'show',
                 effect_out : 'slide'
             },
-            pnotify_delay : 5000
+            pnotify_delay : 3000
         });
 
     },
@@ -282,7 +283,8 @@ var KotiRuutuToolKit = {
                     effect_in : 'show',
                     effect_out : 'slide'
                 },
-                pnotify_type : 'error'
+                pnotify_type : 'error',
+                pnotify_delay : 3000                
             });
         } else {
             var db = getRecLocalStorage();
@@ -297,7 +299,8 @@ var KotiRuutuToolKit = {
                 pnotify_animation : {
                     effect_in : 'show',
                     effect_out : 'slide'
-                }
+                },
+                pnotify_delay : 3000
             });
 
         }
@@ -311,7 +314,8 @@ var KotiRuutuToolKit = {
                     effect_in : 'show',
                     effect_out : 'slide'
                 },
-                pnotify_type : 'error'
+                pnotify_type : 'error',
+                pnotify_delay : 3000
             });
         } else {
             var db = getRecLocalStorage();
@@ -323,7 +327,8 @@ var KotiRuutuToolKit = {
                     pnotify_animation : {
                         effect_in : 'show',
                         effect_out : 'slide'
-                    }
+                    },
+                    pnotify_delay : 3000
                 });
 
                 KotiRuutuToolKit.recordSearchResult(value);
@@ -339,7 +344,7 @@ var KotiRuutuToolKit = {
         $('<iframe />', {
             "name" : iframeName,
             "id" : iframeName,
-            "style" : "width: 0px; height: 0px; position:fixed; top: 0px; z-index: -5;",           
+            "style" : "width: 1px; height: 1px; position:fixed; top: 0px; z-index: -5;",           
             "src" : "index.jsp?m=Search&search=" + (rec[KR_SEARCHSTRING])
         }).appendTo('body').load(function() {
             KotiRuutuToolKitInit.alterLinksSearch($(this.contentDocument).find('body'));
@@ -360,7 +365,8 @@ var KotiRuutuToolKit = {
                     effect_in : 'show',
                     effect_out : 'slide'
                 },
-                pnotify_type : 'error'
+                pnotify_type : 'error',
+                pnotify_delay : 3000
             });
         } else {
             
@@ -373,7 +379,8 @@ var KotiRuutuToolKit = {
                     pnotify_animation : {
                         effect_in : 'show',
                         effect_out : 'slide'
-                    }
+                    },
+                    pnotify_delay : 2000
                 });
 
                 KotiRuutuToolKit.deleteSearchResult(value);
@@ -389,7 +396,7 @@ var KotiRuutuToolKit = {
         $('<iframe />', {
             "name" : iframeName,
             "id" : iframeName,
-            "style" : "width: 0px; height: 0px; position:fixed; top: 0px; z-index: -5;",
+            "style" : "width: 1px; height: 1px; position:fixed; top: 0px; z-index: -5;",
             "src" : "index.jsp?m=Search&search=" + (rec[KR_SEARCHSTRING])
         }).appendTo('body').load(function() {
             KotiRuutuToolKitInit.alterLinksSearch($(this.contentDocument).find('body'));

@@ -20,4 +20,3 @@ function initRecLocalStorageFirstTime() {
         initRecLocalStorage();
     }
 }
-

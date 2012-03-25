@@ -62,10 +62,10 @@ var KotiruutuRecording = {
             }
         }
 
-//        // Is the program text right (not to be found just from desctiption)
-//        if (link[KL_PROGRAMTEXT].toLowerCase().indexOf(rec[KR_SEARCHSTRING]) == -1) {
-//            return false;
-//        }
+        // Is the program text right (not to be found just from desctiption)
+        if (link[KL_PROGRAMTEXT].toLowerCase().indexOf(rec[KR_SEARCHSTRING]) == -1) {
+            return false;
+        }
 
         return true;
     }
