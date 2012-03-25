@@ -13,7 +13,22 @@
             <input type="text" name="searchString" id="searchString" class="text ui-widget-content ui-corner-all" /><br/>
             <!-- TODO channel choice menu käyttäjän kanavista -->
             <label for="channel">Kanava</label>
-            <input type="text" name="channel" id="channel" value="" class="text ui-widget-content ui-corner-all" /><br/>
+            <select size="1" name="channel" id="channel" class="text select ui-widget-content ui-corner-all">
+                <option value="">Kaikki kanavat</option>
+                <option value="Yle TV1">Yle TV1</option>
+                <option value="Yle TV2">Yle TV2</option>
+                <option value="MTV3">MTV3</option>
+                <option value="Nelonen">Nelonen</option>
+                <option value="subTV">subTV</option>
+                <option value="TV5">TV5</option>
+                <option value="JIM">JIM</option>
+                <option value="LIV">LIV</option>
+                <option value="The Voice">The Voice</option>
+                <option value="Yle Teema">Yle Teema</option>            
+                <option value="Yle Fem">Yle Fem</option>                
+                <option value="SuomiTV">SuomiTV</option>
+                <option value="AVA">AVA</option>
+            </select><br/>
             <label for="beginTime">Alkuaika (hh:mm)</label>
             <input type="text" name="beginTime" id="beginTime" maxlength="5" value="" class="text ui-widget-content ui-corner-all" /><br/>
             <label for="durationInMin">+ ajastusjakso</label>
