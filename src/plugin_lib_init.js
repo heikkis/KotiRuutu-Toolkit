@@ -171,7 +171,7 @@ var KotiRuutuToolKitInit = {
             deleteSearchResults);
                         
         var backgroundStatus = $(
-            '<span style="position:fixed; top: 10px; left: 220px;"><img src="' + chrome.extension.getURL("images/ready_32x32.png") + '" id="background_status"/><span id="background_status_counter" /></span>');
+            '<span style="position:fixed; top: 20px; left: 230px;"><img src="' + chrome.extension.getURL("images/ready_32x32.png") + '" id="background_status"/><span id="background_status_counter" /></span>');
         $("body").append(backgroundStatus);
         $(customRoot).find("#background_status").prop("counter", 0);
      }

@@ -307,30 +307,11 @@ var KotiRuutuToolKit = {
     },
 
     recordSearchResults : function() {
-        if (isRecLocalStorageEmpty()) {
-            $.pnotify({
-                pnotify_text : "Ei tallennettuja hakuja!",
-                pnotify_animation : {
-                    effect_in : 'show',
-                    effect_out : 'slide'
-                },
-                pnotify_type : 'error',
-                pnotify_delay : 3000
-            });
-        } else {
+        this.showSavedSearch();
+        
+        if (isRecLocalStorageEmpty() === false) {
             var db = getRecLocalStorage();
             $.each(db, function(index, value) {
-
-                $.pnotify({
-                    pnotify_title : 'Tallennetun haun automaattinen nauhoitus',
-                    pnotify_text : '<span class="added">+</span> ' + value[KR_SEARCHSTRING] + ' hakusanalla',
-                    pnotify_animation : {
-                        effect_in : 'show',
-                        effect_out : 'slide'
-                    },
-                    pnotify_delay : 3000
-                });
-
                 KotiRuutuToolKit.recordSearchResult(value);
             });
         }
@@ -357,32 +338,11 @@ var KotiRuutuToolKit = {
     },
 
     deleteSearchResults : function() {
-        
-        if (isRecLocalStorageEmpty()) {
-            $.pnotify({
-                pnotify_text : "Ei tallennettuja hakuja!",
-                pnotify_animation : {
-                    effect_in : 'show',
-                    effect_out : 'slide'
-                },
-                pnotify_type : 'error',
-                pnotify_delay : 3000
-            });
-        } else {
-            
+        this.showSavedSearch();
+                
+        if (isRecLocalStorageEmpty() === false) {            
             var db = getRecLocalStorage();
             $.each(db, function(index, value) {
-
-                $.pnotify({
-                    pnotify_title : 'Tallennetun haun automaattinen ajatuksien poisto',
-                    pnotify_text : '<span class="removed">-</span> ' + value[KR_SEARCHSTRING] + ' hakusanalla',
-                    pnotify_animation : {
-                        effect_in : 'show',
-                        effect_out : 'slide'
-                    },
-                    pnotify_delay : 2000
-                });
-
                 KotiRuutuToolKit.deleteSearchResult(value);
             });
         }
