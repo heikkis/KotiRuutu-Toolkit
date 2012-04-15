@@ -1,6 +1,6 @@
 {
   "name": "KotiRuutu ToolKit",
-  "version": "4.0",
+  "version": "4.1",
   "description": "Lisätoimintoja nauhoituksien tekemiseen helpommin. Yhteensopiva Sonera KotiTV-palvelun Web-sivuston kanssa.",
   "content_scripts": [
     {
