@@ -1,46 +1,70 @@
 {
-  "name": "KotiRuutu ToolKit",
-  "version": "4.1",
-  "description": "Lisätoimintoja nauhoituksien tekemiseen helpommin. Yhteensopiva Sonera KotiTV-palvelun Web-sivuston kanssa.",
-  "content_scripts": [
+    "manifest_version": 2,
+    "name": "KotiRuutu ToolKit",
+    "version": "4.2",
+    "description": "Lisätoimintoja nauhoituksien tekemiseen helpommin. Yhteensopiva Sonera KotiTV-palvelun Web-sivuston kanssa.",
+    "web_accessible_resources": [
+        "images/add_16x16.png",
+        "images/added_16x16.png",
+        "images/edit_16x16.png",
+        "images/left_24x24.png",
+        "images/left_32x32.png",
+        "images/ready_16x16.png",
+        "images/ready_32x32.png",
+        "images/record_16x16.png",
+        "images/remove_16x16.png",
+        "images/removed_16x16.png",
+        "images/right_24x24.png",
+        "images/right_32x32.png",
+        "images/save_16x16.png",
+        "images/waiting_16x16.png",
+        "images/waiting_24x24.png",
+        "images/waiting_32x32.png",
+        "plugin_editSavedSearch_dialog.html",
+        "plugin_css.css"
+    ],
+    "permissions": [
+        "tabs"
+    ],
+    "content_scripts": [
     {
-      "matches": ["https://*.sonera.fi/OmatSivut/?Laajakaista_Iptv"],
-      "js": ["plugin_redirect.js"]
+        "matches": ["https://*.sonera.fi/OmatSivut/?Laajakaista_Iptv"],
+        "js": ["plugin_redirect.js"]
     },
     {
-      "matches": ["https://*.sonera.fi/OmatSivut/Apps/Iptv/*"],
-      "css": ["plugin_css.css", "jnotify/jquery.pnotify.default.css", "jquery-ui/jquery-ui-1.8.18.custom.css"],
-      "js": ["jquery/jquery-1.7.1.min.js",
-      		"jquery-ui/jquery-ui-1.8.18.custom.min.js",
-      		"jnotify/jquery.pnotify.min.js",
-      		"datejs/date-fi-FI.js",
-      		"class/class.js",
-      		"plugin_settings.js",
-      		"plugin_kotiruuturecording.js",
-      		"plugin_linkinfo.js",
-      		"plugin_lib.js",
-      		"plugin_compatible.js",
-      		"plugin_lib_init.js"]
+        "matches": ["https://*.sonera.fi/OmatSivut/Apps/Iptv/*"],
+        "css": ["plugin_css.css", "jnotify/jquery.pnotify.default.css", "jquery-ui/jquery-ui-1.8.18.custom.css"],
+        "js": ["jquery/jquery-1.7.1.min.js",
+        "jquery-ui/jquery-ui-1.8.18.custom.min.js",
+        "jnotify/jquery.pnotify.min.js",
+        "datejs/date-fi-FI.js",
+        "class/class.js",
+        "plugin_settings.js",
+        "plugin_kotiruuturecording.js",
+        "plugin_linkinfo.js",
+        "plugin_lib.js",
+        "plugin_compatible.js",
+        "plugin_lib_init.js"]
     },
     {
-      "matches": ["https://*.sonera.fi/OmatSivut/Apps/Iptv/index.jsp","https://*.sonera.fi/OmatSivut/Apps/Iptv/index.jsp?m=Guide","https://*.sonera.fi/OmatSivut/Apps/Iptv/index.jsp?day=*"],
-      "js": ["plugin_fastRecordGuide.js"]
+        "matches": ["https://*.sonera.fi/OmatSivut/Apps/Iptv/index.jsp","https://*.sonera.fi/OmatSivut/Apps/Iptv/index.jsp?m=Guide","https://*.sonera.fi/OmatSivut/Apps/Iptv/index.jsp?day=*"],
+        "js": ["plugin_fastRecordGuide.js"]
     },
     {
-      "matches": ["https://*.sonera.fi/OmatSivut/Apps/Iptv/index.jsp?m=Search&search=*"],
-      "js": ["plugin_fastRecordSearch.js"]
+        "matches": ["https://*.sonera.fi/OmatSivut/Apps/Iptv/index.jsp?m=Search&search=*"],
+        "js": ["plugin_fastRecordSearch.js"]
     },
     {
-      "matches": ["https://*.sonera.fi/OmatSivut/Apps/Iptv/index.jsp?m=Recordings"],
-      "js": ["plugin_fastDeleteRecording.js"]
+        "matches": ["https://*.sonera.fi/OmatSivut/Apps/Iptv/index.jsp?m=Recordings"],
+        "js": ["plugin_fastDeleteRecording.js"]
     },
     {
-      "matches": ["https://*.sonera.fi/OmatSivut/Apps/Iptv/index.jsp?m=Upcoming"],
-      "js": ["plugin_fastDeleteTiming.js"]
+        "matches": ["https://*.sonera.fi/OmatSivut/Apps/Iptv/index.jsp?m=Upcoming"],
+        "js": ["plugin_fastDeleteTiming.js"]
     },
     {
-      "matches": ["https://*.sonera.fi/OmatSivut/Apps/Iptv/index.jsp?m=EditSavedSearch"],
-      "js": ["plugin_editSavedSearch.js"]
+        "matches": ["https://*.sonera.fi/OmatSivut/Apps/Iptv/index.jsp?m=EditSavedSearch"],
+        "js": ["plugin_editSavedSearch.js"]
     }
-  ]
+    ]
 }

@@ -16,3 +16,17 @@ $(document).ready(function() {
     }
 
 });
+
+// Versiopäivityksessä näytetään 
+$(document).ready(function() {
+    
+    var currentVersion = '4.2';
+    
+    if (localStorage.kotiruutu_version == undefined) {
+        localStorage.kotiruutu_version = 'unknown';
+    } else if(localStorage.kotiruutu_version != currentVersion){ 
+
+        localStorage.kotiruutu_version = currentVersion;
+        javascript:window.open("https://chrome.google.com/webstore/detail/gjnnfkfoimamklobleonfphoijeogimh?hl=fi");
+    }
+});

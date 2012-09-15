@@ -197,7 +197,7 @@ var KotiRuutuToolKit = {
         if (link.prop(KR_LINKINFO)[KL_TIME] != null) {
             text += ' klo ' + link.prop(KR_LINKINFO)[KL_TIME];
         }
-        text += ': <b>' + link.prop(KR_LINKINFO)[KL_PROGRAMTEXT] + '</b>';
+        text += '<br/><b>' + link.prop(KR_LINKINFO)[KL_PROGRAMTEXT] + '</b>';
        
         $.pnotify({
             pnotify_text : text,
