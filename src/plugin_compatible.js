@@ -20,7 +20,7 @@ $(document).ready(function() {
 // Versiopäivityksessä näytetään 
 $(document).ready(function() {
     
-    var currentVersion = '4.2';
+    var currentVersion = '4.3';
     
     if (localStorage.kotiruutu_version == undefined) {
         localStorage.kotiruutu_version = 'unknown';
