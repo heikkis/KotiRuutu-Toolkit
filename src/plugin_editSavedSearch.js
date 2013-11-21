@@ -100,14 +100,12 @@ $(document)
                     + ' id=\"editSearchList\"><br/><br/><div align="center"><b>Tallennetut hakusanat</b></div><br/></div></div>');
                  
                 reloadFromDB();
-                
-                $("body").append("<div id='savedSearchDialog' style=''/>");
-                $("#savedSearchDialog").load(chrome.extension.getURL("plugin_editSavedSearch_dialog.html"), function() {
-                    $("#editSavedSearchDialog").bind( "dialogbeforeclose", function(event, ui) {
-                        reloadFromDB();
-                    });   
-                });
-
             }
 
+            $("body").append("<div id='savedSearchDialog' style=''/>");
+            $("#savedSearchDialog").load(chrome.extension.getURL("plugin_editSavedSearch_dialog.html"), function() {
+                $("#editSavedSearchDialog").bind( "dialogbeforeclose", function(event, ui) {
+                    reloadFromDB();
+                });
+            });
         });
