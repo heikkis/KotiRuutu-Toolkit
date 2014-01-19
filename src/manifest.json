@@ -1,7 +1,7 @@
 {
     "manifest_version": 2,
     "name": "KotiRuutu ToolKit",
-    "version": "4.3.1",
+    "version": "4.3.2",
     "description": "Lisätoimintoja nauhoituksien tekemiseen helpommin. Yhteensopiva Sonera KotiTV-palvelun Web-sivuston kanssa.",
     "web_accessible_resources": [
         "images/add_16x16.png",
@@ -29,7 +29,7 @@
         "js": ["plugin_redirect.js"]
     },
     {
-        "matches": ["https://*.sonera.fi/OmatSivut/Apps/Iptv/*"],
+        "matches": ["https://*.sonera.fi/palvelut/Apps/Iptv/*"],
         "css": ["plugin_css.css", "jnotify/jquery.pnotify.default.css", "jquery-ui/jquery-ui-1.8.18.custom.css"],
         "js": ["jquery/jquery-1.7.1.min.js",
         "jquery-ui/jquery-ui-1.8.18.custom.min.js",
@@ -44,23 +44,23 @@
         "plugin_lib_init.js"]
     },
     {
-        "matches": ["https://*.sonera.fi/OmatSivut/Apps/Iptv/index.jsp","https://*.sonera.fi/OmatSivut/Apps/Iptv/index.jsp?m=Guide","https://*.sonera.fi/OmatSivut/Apps/Iptv/index.jsp?day=*"],
+        "matches": ["https://*.sonera.fi/palvelut/Apps/Iptv/index.jsp","https://*.sonera.fi/palvelut/Apps/Iptv/index.jsp?m=Guide","https://*.sonera.fi/palvelut/Apps/Iptv/index.jsp?day=*"],
         "js": ["plugin_fastRecordGuide.js"]
     },
     {
-        "matches": ["https://*.sonera.fi/OmatSivut/Apps/Iptv/index.jsp?m=Search&search=*"],
+        "matches": ["https://*.sonera.fi/palvelut/Apps/Iptv/index.jsp?m=Search&search=*"],
         "js": ["plugin_fastRecordSearch.js"]
     },
     {
-        "matches": ["https://*.sonera.fi/OmatSivut/Apps/Iptv/index.jsp?m=Recordings"],
+        "matches": ["https://*.sonera.fi/palvelut/Apps/Iptv/index.jsp?m=Recordings"],
         "js": ["plugin_fastDeleteRecording.js"]
     },
     {
-        "matches": ["https://*.sonera.fi/OmatSivut/Apps/Iptv/index.jsp?m=Upcoming"],
+        "matches": ["https://*.sonera.fi/palvelut/Apps/Iptv/index.jsp?m=Upcoming"],
         "js": ["plugin_fastDeleteTiming.js"]
     },
     {
-        "matches": ["https://*.sonera.fi/OmatSivut/Apps/Iptv/index.jsp?m=EditSavedSearch"],
+        "matches": ["https://*.sonera.fi/palvelut/Apps/Iptv/index.jsp?m=EditSavedSearch"],
         "js": ["plugin_editSavedSearch.js"]
     }
     ]
