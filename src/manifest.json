@@ -1,7 +1,7 @@
 {
     "manifest_version": 2,
     "name": "KotiRuutu ToolKit",
-    "version": "4.3.3",
+    "version": "4.3.4",
     "description": "Lisätoimintoja nauhoituksien tekemiseen helpommin. Yhteensopiva Sonera KotiTV-palvelun Web-sivuston kanssa.",
     "web_accessible_resources": [
         "images/add_16x16.png",
